@@ -45,17 +45,22 @@ This function should only modify configuration layer settings."
      ;; Show snippets in the auto-completion popup
      ;; Show suggestions by most commonly used
      (auto-completion :variables
-                      auto-completion-enable-help-tooltip t
+                      auto-completion-return-key-behavior 'complete
+                      auto-completion-tab-key-behavior 'cycle
+                      auto-completion-complete-with-key-sequence "fd"
+                      auto-completion-complete-with-key-sequence-delay 0.1
+                      auto-completion-enable-help-tooltip nil
                       auto-completion-enable-snippets-in-popup t
                       auto-completion-enable-sort-by-usage t
+                      auto-completion-use-company-box nil
+                      auto-completion-use-company-posframe t
                       auto-completion-idle-delay 0.0
                       auto-completion-minimum-prefix-length 1
-                      ;; auto-completion-complete-with-key-sequence "fd"
                       )
 
      ;; https://develop.spacemacs.org/layers/+lang/clojure/README.html
      (clojure :variables
-              ;; clojure-backend 'cider                 ; use cider and disable lsp
+              clojure-backend 'cider                 ; use cider and disable lsp
               clojure-enable-kaocha-runner t            ; enable Kaocha test runner
               cider-repl-display-help-banner nil        ; disable help banner
               cider-print-fn 'puget                     ; pretty printing with sorted keys / set values
@@ -114,7 +119,43 @@ This function should only modify configuration layer settings."
 
      html
      javascript
+     typescript
+     erlang
+     elixir
+     (go :variables
+         go-tab-width 2
+         go-format-before-save t
+         go-use-golangci-lint t)
+     (python :variables
+             python-backend 'lsp
+             python-lsp-server 'pyright
+             python-formatter 'black
+             python-save-before-test t
+             python-virtualenv-management 'pet
+             python-enable-tools '(uv))
+     ipython-notebook
+     (python :variables
+             python-backend 'lsp
+             python-lsp-server 'basedpyright
+             python-test-runner 'pytest
+             python-test-dispatcher 'pytest
+             python-test-pytest-executable "pytest"
+             python-test-pytest-args "-v -s --tb=short"
+             python-test-pytest-options "--maxfail=1 --disable-warnings"
+             python-pylint nil
+             python-check-command nil ;; Disable linting and PEP8 strict checks
+             python-sort-imports-on-save t
+             python-auto-format-on-save nil ;; disable auto-formatting, it is annoying to use with auto-save
+             python-format-on-save nil
+             python-fill-column 100
+             python-save-before-test t
+             python-virtualenv-management 'pet
+             python-enable-tools '(uv)
+             python-formatter 'black)
      json
+     graphql
+     shell-scripts
+     sql
 
      ;; Language server protocol with minimal visual impact
      ;; https://practical.li/spacemacs/install-spacemacs/clojure-lsp/
@@ -129,7 +170,9 @@ This function should only modify configuration layer settings."
           lsp-ui-doc-enable nil                           ; doc hover popups
           lsp-ui-sideline-enable nil                      ; sidebar code actions visual indicator
           treemacs-space-between-root-nodes nil           ; spacing in treemacs views
-          lsp-log-io t                                    ; Log client-server json communication
+          lsp-log-io nil                                    ; Log client-server json communication
+          lsp-format-buffer-on-save nil
+          lsp-enable-indentation nil
           )
 
      markdown
@@ -222,6 +265,10 @@ This function should only modify configuration layer settings."
      (yaml :variables
            yaml-enable-lsp t)
 
+     osx
+     dash
+     github-copilot
+     llm-client
      ) ; End of dotspacemacs-configuration-layers
 
 
@@ -267,7 +314,7 @@ It should only modify the values of Spacemacs settings."
    ;; This is an advanced option and should not be changed unless you suspect
    ;; performance issues due to garbage collection operations.
    ;; (default '(100000000 0.1))
-   dotspacemacs-gc-cons '(100000000 0.1)
+   dotspacemacs-gc-cons '(200000000 0.1)
 
    ;; Set `read-process-output-max' when startup finishes.
    ;; This defines how much data is read from a foreign process.
@@ -318,7 +365,7 @@ It should only modify the values of Spacemacs settings."
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
    ;; dotspacemacs-startup-banner 'official
-   dotspacemacs-startup-banner (concat dotspacemacs-directory "banners/practicalli-logo.svg")
+   dotspacemacs-startup-banner 'official
 
    ;; Scale factor controls the scaling (size) of the startup banner. Default
    ;; value is `auto' for scaling the logo automatically to fit all buffer
@@ -405,7 +452,7 @@ It should only modify the values of Spacemacs settings."
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
    dotspacemacs-default-font '("Fira Code"
-                               :size 12.0
+                               :size 14.0
                                :weight normal
                                :width normal)
 
@@ -592,10 +639,10 @@ It should only modify the values of Spacemacs settings."
    ;; When used in a plist, `visual' takes precedence over `relative'.
    ;; (default nil)
    dotspacemacs-line-numbers '(:visual t
-                               :disabled-for-modes dired-mode
-                                                   doc-view-mode
-                                                   pdf-view-mode
-                               :size-limit-kb 1000)
+                                       :disabled-for-modes dired-mode
+                                       doc-view-mode
+                                       pdf-view-mode
+                                       :size-limit-kb 1000)
 
    ;; Code folding method. Possible values are `evil', `origami' and `vimish'.
    ;; (default 'evil)
@@ -727,7 +774,7 @@ default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
   (spacemacs/load-spacemacs-env)
-)
+  )
 
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
@@ -743,7 +790,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   ;; simplifying version control of the Spacemacs configuration file
   (setq custom-file (file-truename (concat dotspacemacs-directory "emacs-custom-settings.el")))
   (load custom-file)
-)
+  )
 
 
 (defun dotspacemacs/user-load ()
@@ -751,7 +798,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
 dump."
-)
+  )
 
 
 (defun dotspacemacs/user-config ()
@@ -786,10 +833,10 @@ before packages are loaded."
 
   ;; EShell Customisation
   ;; NOTE: Practicalli uses vterm for shell by default
-  ;; (setq eshell-config-file (file-truename (concat dotspacemacs-directory "eshell-config.el")))
-  ;; (load eshell-config-file)
+  (setq eshell-config-file (file-truename (concat dotspacemacs-directory "eshell-config.el")))
+  (load eshell-config-file)
 
-)
+  )
 
 
 ;; Do not write anything past this comment. This is where Emacs will
