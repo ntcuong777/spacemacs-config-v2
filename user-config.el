@@ -118,3 +118,6 @@
 
   ;; Also catch ESC sequences (two-step ESC ESC)
   (define-key helm-map (kbd "ESC ESC") #'helm-keyboard-quit))
+
+;; Disable xterm mouse mode to avoid conflicts with terminal multiplexer
+(xterm-mouse-mode -1)

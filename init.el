@@ -117,6 +117,25 @@ This function should only modify configuration layer settings."
      ;; - remembers use of C-c C-f in helm pop-up
      helm
 
+     ;; Enhance Emacs
+     (ibuffer :variables
+              ibuffer-group-buffers-by 'projects)
+     ;;helpful
+     dtrt-indent
+     nav-flash
+     spacemacs-completion
+     spacemacs-defaults
+     spacemacs-editing
+     spacemacs-editing-visual
+     spacemacs-evil
+     spacemacs-misc
+     spacemacs-modeline
+     spacemacs-navigation
+     spacemacs-org
+     spacemacs-project
+     spacemacs-purpose
+     spacemacs-visual
+
      html
      javascript
      typescript
@@ -136,7 +155,7 @@ This function should only modify configuration layer settings."
      ipython-notebook
      (python :variables
              python-backend 'lsp
-             python-lsp-server 'basedpyright
+             python-lsp-server 'pyright
              python-test-runner 'pytest
              python-test-dispatcher 'pytest
              python-test-pytest-executable "pytest"
@@ -149,13 +168,14 @@ This function should only modify configuration layer settings."
              python-format-on-save nil
              python-fill-column 100
              python-save-before-test t
-             python-virtualenv-management 'pet
+             python-virtualenv-management 'pyenv ;; or 'pet
              python-enable-tools '(uv)
              python-formatter 'black)
      json
      graphql
      shell-scripts
      sql
+     nixos
 
      ;; Language server protocol with minimal visual impact
      ;; https://practical.li/spacemacs/install-spacemacs/clojure-lsp/
@@ -173,6 +193,7 @@ This function should only modify configuration layer settings."
           lsp-log-io nil                                    ; Log client-server json communication
           lsp-format-buffer-on-save nil
           lsp-enable-indentation nil
+          lsp-pyright-langserver-command "basedpyright"
           )
 
      markdown
@@ -281,7 +302,8 @@ This function should only modify configuration layer settings."
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(catppuccin-theme
-                                      clojure-essential-ref)
+                                      clojure-essential-ref
+                                      lsp-pyright)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -500,7 +522,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil then the last auto saved layouts are resumed automatically upon
    ;; start. (default nil)
-   dotspacemacs-auto-resume-layouts t
+   dotspacemacs-auto-resume-layouts nil
 
    ;; If non-nil, auto-generate layout name when creating new layouts. Only has
    ;; effect when using the "jump to layout by number" commands. (default nil)
