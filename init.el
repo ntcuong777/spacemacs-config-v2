@@ -252,7 +252,7 @@ This function should only modify configuration layer settings."
      ;; Spell as you type with Flyspell package,
      ;; requires external command - ispell, hunspell, aspell
      ;; SPC S menu, SPC S s to check current word
-     spell-checking
+     ;; spell-checking
 
      ;; Use original flycheck fringe bitmaps
      ;; (syntax-checking :variables
@@ -281,20 +281,20 @@ This function should only modify configuration layer settings."
      (yaml :variables
            yaml-enable-lsp t)
 
-     osx
+     ;;osx
      dash
      pdf
      epub
      github-copilot
      llm-client
 
-    ;; TTY improvements for clipboard
-    xclipboard
+     ;; TTY improvements for clipboard
+     xclipboard
 
-    ;; Custom TTY configuration layer
-    tty-config
+     ;; Custom TTY configuration layer
+     tty-config
 
-    ;; Vim
+     ;; Vim
      evil-better-jumper
      evil-commentary
      (evil-snipe :variables evil-snipe-enable-alternate-f-and-t-behaviors t)

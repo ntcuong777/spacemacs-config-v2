@@ -32,12 +32,68 @@
   (add-hook 'prog-mode-hook #'smartparens-mode)
   (require 'smartparens-config)
 
-  (define-key smartparens-mode-map (kbd "M-(") 'sp-wrap-round)
-  (define-key smartparens-mode-map (kbd "M-[") 'sp-wrap-square)
-  (define-key smartparens-mode-map (kbd "M-{") 'sp-wrap-curly)
+  ;; (define-key smartparens-mode-map (kbd "M-(") 'sp-wrap-round)
+  ;; (define-key smartparens-mode-map (kbd "M-[") 'sp-wrap-square)
+  ;; (define-key smartparens-mode-map (kbd "M-{") 'sp-wrap-curly)
   ;; Apply default smartparens bindings
-  (dolist (binding sp-smartparens-bindings)
-    (define-key smartparens-mode-map (kbd (car binding)) (cdr binding))))
+  ;; (dolist (binding sp-smartparens-bindings)
+  ;;   (define-key smartparens-mode-map (kbd (car binding)) (cdr binding)))
+
+  ;; Smartparens keybindings (Doom -> Spacemacs)
+  ;; Put in dotspacemacs/user-config
+
+  ;; Top-level under SPC k
+  (spacemacs/set-leader-keys
+    "ks"  '(sp-forward-slurp-sexp :which-key "Slurp forward")
+    "kS"  '(sp-backward-slurp-sexp :which-key "Slurp backward")
+    "k$"  '(sp-end-of-sexp :which-key "End of sexp")
+
+    ;; Hybrid prefix: SPC k `
+    "k`k" '(sp-kill-hybrid-sexp :which-key "Hybrid kill")
+    "k`p" '(sp-push-hybrid-sexp :which-key "Hybrid push")
+    "k`s" '(sp-slurp-hybrid-sexp :which-key "Hybrid slurp")
+    "k`t" '(sp-transpose-hybrid-sexp :which-key "Hybrid transpose")
+
+    "ka"  '(sp-absorb-sexp :which-key "Absorb")
+    "kb"  '(sp-forward-barf-sexp :which-key "Barf forward")
+    "kB"  '(sp-backward-barf-sexp :which-key "Barf backward")
+    "kc"  '(sp-convolute-sexp :which-key "Convolute")
+
+    ;; Delete prefix: SPC k d
+    "kds" '(sp-kill-symbol :which-key "Delete symbol")
+    "kdS" '(sp-backward-kill-symbol :which-key "Delete symbol backward")
+    "kdw" '(sp-kill-word :which-key "Delete word")
+    "kdW" '(sp-backward-kill-word :which-key "Delete word backward")
+    "kdx" '(sp-kill-sexp :which-key "Kill sexp")
+    "kdX" '(sp-backward-kill-sexp :which-key "Kill sexp backward")
+
+    "k@" '(sp-splice-sexp :which-key "Splice")
+    "ke"  '(sp-splice-sexp-killing-forward :which-key "Splice (kill fwd)")
+    "kE"  '(sp-splice-sexp-killing-backward :which-key "Splice (kill back)")
+
+    "kh"  '(sp-backward-symbol :which-key "Symbol backward")
+    "kH"  '(sp-backward-sexp :which-key "Sexp backward")
+    "kj"  '(sp-join-sexp :which-key "Join")
+
+    "kl"  '(sp-forward-sexp :which-key "Sexp forward")
+    ;; You had both l and L -> same command; keep L too:
+    "kL"  '(sp-forward-sexp :which-key "Sexp forward")
+
+    "kr"  '(sp-raise-sexp :which-key "Raise")
+    "kt"  '(sp-transpose-sexp :which-key "Transpose")
+    "kU"  '(sp-backward-up-sexp :which-key "Up backward")
+
+    ;; Wrap prefix: SPC k w
+    "kw(" '(sp-wrap-round :which-key "Wrap ()")
+    "kw{" '(sp-wrap-curly :which-key "Wrap {}")
+    "kw[" '(sp-wrap-square :which-key "Wrap []")
+    "kww" '(sp-wrap-round :which-key "Wrap round")
+    "kwc" '(sp-wrap-curly :which-key "Wrap curly")
+    "kws" '(sp-wrap-square :which-key "Wrap square")
+    "kwu" '(sp-unwrap-sexp :which-key "Unwrap")
+
+    "ky"  '(sp-copy-sexp :which-key "Copy sexp"))
+  )
 
 ;; (add-hook 'lisp-mode-hook #'smartparens-mode)
 ;; (add-hook 'emacs-lisp-mode-hook #'smartparens-mode)
@@ -49,14 +105,24 @@
 
 
 (with-eval-after-load 'copilot
+  (setq copilot-max-char-warning-disable t
+        copilot-indent-offset-warning-disable t)
+  (dolist (indent-config '((prog-mode . 4)
+                           (org-mode . 2)
+                           (text-mode . 2)
+                           (clojure-mode . 2)
+                           (python-mode . 4)
+                           (python-ts-mode . 4)
+                           (emacs-lisp-mode . 2)
+                           (elisp-mode . 2)
+                           (lisp-mode . 2)
+                           (js-mode . 2)
+                           (js-ts-mode . 2)
+                           (typescript-mode . 2)
+                           (typescript-ts-mode . 2)))
+    (add-to-list 'copilot-indentation-alist indent-config))
   (add-hook 'prog-mode-hook #'copilot-mode)
-  (add-to-list 'copilot-indentation-alist '(prog-mode . 4))
-  (add-to-list 'copilot-indentation-alist '(org-mode . 2))
-  (add-to-list 'copilot-indentation-alist '(text-mode . 2))
-  (add-to-list 'copilot-indentation-alist '(clojure-mode . 2))
-  (add-to-list 'copilot-indentation-alist '(python-mode . 4))
-  (add-to-list 'copilot-indentation-alist '(python-ts-mode . 4))
-  (add-to-list 'copilot-indentation-alist '(emacs-lisp-mode . 2)))
+  )
 
 
 ;; Map ESC to quit several mode
@@ -176,3 +242,22 @@
 (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
 
 ;; ---------------------------------------
+
+
+;; ---------------------------------------
+;; Evil
+;;
+
+(with-eval-after-load 'evil-cleverparens
+  (setq evil-cp-move-beginning-of-defun-keys '("M-[" "M-{")
+        evil-cp-move-end-of-defun-keys '("M-]" "M-}"))
+
+  ;; (delete '("M-l" . evil-cp-beginning-of-defun) evil-cp-additional-movement-keys)
+  ;; (delete '("M-h" . evil-cp-end-of-defun) evil-cp-additional-movement-keys)
+  ;; (dolist (key evil-cp-move-beginning-of-defun-keys)
+  ;;   (add-to-list 'evil-cp-additional-movement-keys `(,key . evil-cp-beginning-of-defun)))
+  ;; (dolist (key evil-cp-move-end-of-defun-keys)
+  ;;   (add-to-list 'evil-cp-additional-movement-keys `(,key . evil-cp-end-of-defun)))
+
+  (evil-cp-set-additional-movement-keys)
+  )
