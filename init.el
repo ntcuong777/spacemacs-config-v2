@@ -28,7 +28,7 @@ This function should only modify configuration layer settings."
 
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. "~/.mycontribs/")
-   dotspacemacs-configuration-layer-path '()
+   dotspacemacs-configuration-layer-path '("~/.config/spacemacs/private-layers/")
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
@@ -129,7 +129,6 @@ This function should only modify configuration layer settings."
      spacemacs-editing-visual
      spacemacs-evil
      spacemacs-misc
-     spacemacs-modeline
      spacemacs-navigation
      spacemacs-org
      spacemacs-project
@@ -145,13 +144,6 @@ This function should only modify configuration layer settings."
          go-tab-width 2
          go-format-before-save t
          go-use-golangci-lint t)
-     (python :variables
-             python-backend 'lsp
-             python-lsp-server 'pyright
-             python-formatter 'black
-             python-save-before-test t
-             python-virtualenv-management 'pet
-             python-enable-tools '(uv))
      ipython-notebook
      (python :variables
              python-backend 'lsp
@@ -183,14 +175,14 @@ This function should only modify configuration layer settings."
           lsp-headerline-breadcrumb-enable t              ; Breadcrumb trail
           lsp-headerline-breadcrumb-segments '(symbols)   ; namespace & symbols, no file path
           lsp-ui-peek-enable nil                          ; popups for refs, errors, symbols, etc.
-          lsp-semantic-tokens-enable t                    ; enhance syntax highlight
+          lsp-semantic-tokens-enable nil                  ; enhance syntax highlight
           lsp-treemacs-error-list-current-project-only t  ; limit errors to current project
           lsp-idle-delay 1.5                              ; smooth LSP features response
           lsp-eldoc-enable-hover nil                      ; disable all hover actions
           lsp-ui-doc-enable nil                           ; doc hover popups
           lsp-ui-sideline-enable nil                      ; sidebar code actions visual indicator
           treemacs-space-between-root-nodes nil           ; spacing in treemacs views
-          lsp-log-io nil                                    ; Log client-server json communication
+          lsp-log-io nil                                  ; Log client-server json communication
           lsp-format-buffer-on-save nil
           lsp-enable-indentation nil
           lsp-pyright-langserver-command "basedpyright"
@@ -217,7 +209,6 @@ This function should only modify configuration layer settings."
           org-journal-time-format ""
           org-journal-carryover-items "TODO=\"TODO\"|TODO=\"DOING\"|TODO=\"BLOCKED\"|TODO=\"REVIEW\"")
 
-
      ;; Text-based file manager with preview - SPC a t r r
      (ranger :variables
              ranger-show-preview t
@@ -229,7 +220,7 @@ This function should only modify configuration layer settings."
      ;; SPC ' runs shell in a popup buffer
      (shell :variables
             shell-default-shell 'vterm
-            shell-default-term-shell "/usr/bin/zsh"
+            shell-default-term-shell "/bin/zsh"
             shell-default-height 30
             shell-default-position 'bottom)
 
@@ -238,7 +229,11 @@ This function should only modify configuration layer settings."
      ;; Kill buffers when killing layer - SPC l x
      (spacemacs-layouts :variables
                         spacemacs-layouts-restrict-spc-tab t
-                        persp-autokill-buffer-on-remove 'kill-weak)
+                        persp-autokill-buffer-on-remove 'kill-weak
+                        spacemacs-layouts-restricted-functions
+                        '(spacemacs/window-split-double-columns
+                          spacemacs/window-split-triple-columns
+                          spacemacs/window-split-grid))
 
      ;; Configuration: https://github.com/seagle0128/doom-modeline#customize
      (spacemacs-modeline :variables
@@ -274,7 +269,7 @@ This function should only modify configuration layer settings."
      ;; 'prog-mode for only programming languages
      ;; including text-mode may cause issues with org-mode and magit
      (unicode-fonts :variables
-                    unicode-fonts-enable-ligatures t
+                    unicode-fonts-enable-ligatures nil
                     unicode-fonts-ligature-modes '(prog-mode))
 
      ;; Highlight changes in buffers
@@ -288,8 +283,19 @@ This function should only modify configuration layer settings."
 
      osx
      dash
+     pdf
+     epub
      github-copilot
      llm-client
+
+     ;; TTY improvements for clipboard
+     xclipboard
+
+     ;; Vim
+     evil-better-jumper
+     evil-commentary
+     (evil-snipe :variables evil-snipe-enable-alternate-f-and-t-behaviors t)
+     vinegar
      ) ; End of dotspacemacs-configuration-layers
 
 
@@ -303,7 +309,9 @@ This function should only modify configuration layer settings."
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(catppuccin-theme
                                       clojure-essential-ref
-                                      lsp-pyright)
+                                      lsp-pyright
+                                      kkp
+                                      evil-terminal-cursor-changer)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -336,7 +344,7 @@ It should only modify the values of Spacemacs settings."
    ;; This is an advanced option and should not be changed unless you suspect
    ;; performance issues due to garbage collection operations.
    ;; (default '(100000000 0.1))
-   dotspacemacs-gc-cons '(200000000 0.1)
+   dotspacemacs-gc-cons '(100000000 0.1)
 
    ;; Set `read-process-output-max' when startup finishes.
    ;; This defines how much data is read from a foreign process.
@@ -812,6 +820,12 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   ;; simplifying version control of the Spacemacs configuration file
   (setq custom-file (file-truename (concat dotspacemacs-directory "emacs-custom-settings.el")))
   (load custom-file)
+
+  ;; Path to my custom lisp files
+  (defvar user-core-dir (expand-file-name "lisp/" user-emacs-directory)
+    "Directory containing core customizations, libraries, utilities for Emacs.")
+
+  (add-to-list 'load-path user-core-dir)
   )
 
 

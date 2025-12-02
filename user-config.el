@@ -41,11 +41,6 @@
   (dolist (binding sp-smartparens-bindings)
     (define-key smartparens-mode-map (kbd (car binding)) (cdr binding))))
 
-;; Add auto save to several language mode
-(setq lsp-enable-indentation nil
-      ;; lsp-enable-on-type-formatting nil
-      lsp-format-buffer-on-save nil)
-
 (add-hook 'lisp-mode-hook #'smartparens-mode)
 (add-hook 'emacs-lisp-mode-hook #'smartparens-mode)
 (add-hook 'elisp-mode #'smartparens-mode)
@@ -53,6 +48,17 @@
 
 (add-hook 'python-mode-hook #'smartparens-mode)
 (add-hook 'go-mode-hook #'smartparens-mode)
+
+
+(with-eval-after-load 'copilot
+  (add-hook 'prog-mode-hook #'copilot-mode)
+  (add-to-list 'copilot-indentation-alist '(prog-mode . 4))
+  (add-to-list 'copilot-indentation-alist '(org-mode . 2))
+  (add-to-list 'copilot-indentation-alist '(text-mode . 2))
+  (add-to-list 'copilot-indentation-alist '(clojure-mode . 2))
+  (add-to-list 'copilot-indentation-alist '(python-mode . 4))
+  (add-to-list 'copilot-indentation-alist '(python-ts-mode . 4))
+  (add-to-list 'copilot-indentation-alist '(emacs-lisp-mode . 2)))
 
 
 ;; Map ESC to quit several mode
@@ -119,5 +125,67 @@
   ;; Also catch ESC sequences (two-step ESC ESC)
   (define-key helm-map (kbd "ESC ESC") #'helm-keyboard-quit))
 
-;; Disable xterm mouse mode to avoid conflicts with terminal multiplexer
-(xterm-mouse-mode -1)
+;; ;; Disable xterm mouse mode to avoid conflicts with terminal multiplexer
+;; (xterm-mouse-mode -1)
+
+;; Terminal mouse support (scroll, click, etc.)
+(unless (display-graphic-p)
+  (xterm-mouse-mode 1)
+  (setq mouse-sel-mode t       ; enable mouse-based selection
+        mouse-yank-at-point t)
+  (global-set-key (kbd "<mouse-4>") #'scroll-down-line)
+  (global-set-key (kbd "<mouse-5>") #'scroll-up-line)
+  (define-key global-map [mouse-1] #'mouse-set-point))
+
+(with-eval-after-load 'evil
+  (define-key evil-normal-state-map [mouse-1] #'mouse-set-point)
+  (define-key evil-insert-state-map [mouse-1] #'mouse-set-point))
+
+;; Make Emacs use the system clipboard when possible
+(setq select-enable-clipboard t
+      select-enable-primary t
+      save-interprogram-paste-before-kill t)
+
+(with-eval-after-load 'lsp-pyright
+  (setq lsp-pyright-langserver-command "basedpyright")
+  (add-hook 'python-mode-hook (lambda ()
+                                (require 'lsp-pyright)
+                                (lsp-deferred))))  ; or lsp-deferred
+
+
+;; ---------------------------------------
+;; LSP booster
+;;
+
+(defun lsp-booster--advice-json-parse (old-fn &rest args)
+  "Try to parse bytecode instead of json."
+  (or
+   (when (equal (following-char) ?#)
+     (let ((bytecode (read (current-buffer))))
+       (when (byte-code-function-p bytecode)
+         (funcall bytecode))))
+   (apply old-fn args)))
+(advice-add (if (progn (require 'json)
+                       (fboundp 'json-parse-buffer))
+                'json-parse-buffer
+              'json-read)
+            :around
+            #'lsp-booster--advice-json-parse)
+
+(defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+  "Prepend emacs-lsp-booster command to lsp CMD."
+  (let ((orig-result (funcall old-fn cmd test?)))
+    (if (and (not test?)                             ;; for check lsp-server-present?
+             (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
+             lsp-use-plists
+             (not (functionp 'json-rpc-connection))  ;; native json-rpc
+             (executable-find "emacs-lsp-booster"))
+        (progn
+          (when-let ((command-from-exec-path (executable-find (car orig-result))))  ;; resolve command from exec-path (in case not found in $PATH)
+            (setcar orig-result command-from-exec-path))
+          (message "Using emacs-lsp-booster for %s!" orig-result)
+          (cons "emacs-lsp-booster" orig-result))
+      orig-result)))
+(advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
+
+;; ---------------------------------------
