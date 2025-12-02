@@ -20,7 +20,7 @@ This function should only modify configuration layer settings."
    ;; installation feature and you have to explicitly list a layer in the
    ;; variable `dotspacemacs-configuration-layers' to install it.
    ;; (default 'unused)
-   dotspacemacs-enable-lazy-installation nil
+   dotspacemacs-enable-lazy-installation 'unused
 
    ;; If non-nil then Spacemacs will ask for confirmation before installing
    ;; a layer lazily. (default t)
@@ -54,7 +54,7 @@ This function should only modify configuration layer settings."
                       auto-completion-enable-sort-by-usage t
                       auto-completion-use-company-box nil
                       auto-completion-use-company-posframe t
-                      auto-completion-idle-delay 0.0
+                      auto-completion-idle-delay 0.1
                       auto-completion-minimum-prefix-length 1
                       )
 
@@ -288,10 +288,13 @@ This function should only modify configuration layer settings."
      github-copilot
      llm-client
 
-     ;; TTY improvements for clipboard
-     xclipboard
+    ;; TTY improvements for clipboard
+    xclipboard
 
-     ;; Vim
+    ;; Custom TTY configuration layer
+    tty-config
+
+    ;; Vim
      evil-better-jumper
      evil-commentary
      (evil-snipe :variables evil-snipe-enable-alternate-f-and-t-behaviors t)
@@ -310,8 +313,8 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages '(catppuccin-theme
                                       clojure-essential-ref
                                       lsp-pyright
-                                      kkp
-                                      evil-terminal-cursor-changer)
+                                      ;; kkp and evil-terminal-cursor-changer moved to tty-config layer
+                                      )
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -458,10 +461,11 @@ It should only modify the values of Spacemacs settings."
    ;; `:location' to download the theme package, refer the themes section in
    ;; DOCUMENTATION.org for the full theme specifications.
    dotspacemacs-themes '(catppuccin
-                         doom-gruvbox
-                         doom-gruvbox-light
-                         spacemacs-dark
-                         spacemacs-light)
+                         ;; doom-gruvbox
+                         ;; doom-gruvbox-light
+                         ;; spacemacs-dark
+                         ;; spacemacs-light
+                         )
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -795,7 +799,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-home-shorten-agenda-source nil
 
    ;; If non-nil then byte-compile some of Spacemacs files.
-   dotspacemacs-byte-compile nil))
+   dotspacemacs-byte-compile t))
 
 (defun dotspacemacs/user-env ()
   "Environment variables setup.
@@ -821,11 +825,53 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   (setq custom-file (file-truename (concat dotspacemacs-directory "emacs-custom-settings.el")))
   (load custom-file)
 
-  ;; Path to my custom lisp files
-  (defvar user-core-dir (expand-file-name "lisp/" user-emacs-directory)
-    "Directory containing core customizations, libraries, utilities for Emacs.")
+  (defvar user-emacs-cache-dir
+    (expand-file-name ".local/cache/" dotspacemacs-directory)
+    "Where to stores its global cache files.
 
-  (add-to-list 'load-path user-core-dir)
+  Cache files represent unessential data that shouldn't be problematic when
+  deleted (besides, perhaps, a one-time performance hit), lack portability (and so
+  shouldn't be copied to other systems/configs), and are regenerated when needed,
+  without user input.
+
+  Some examples: images/data caches, elisp bytecode, natively compiled elisp,
+  session files, ELPA archives, authinfo files, org-persist, etc.")
+
+  (defvar user-emacs-local-dir
+    (expand-file-name ".local/" dotspacemacs-directory)
+    "Root directory for local storage.
+
+  Use this as a storage location for this system's installation of Emacs.")
+
+  (defvar user-emacs-state-dir
+    (file-name-concat user-emacs-local-dir "state/")
+    "Where Doom stores its global state files.
+
+  State files contain unessential, non-portable, but persistent data which, if
+  lost won't cause breakage, but may be inconvenient as they cannot be
+  automatically regenerated or restored. For example, a recently-opened file list
+  is not essential, but losing it means losing this record, and restoring it
+  requires revisiting all those files.
+
+  Use this for: history, logs, user-saved data, autosaves/backup files, known
+  projects, recent files, bookmarks.")
+
+  (defvar user-emacs-data-dir
+    (file-name-concat user-emacs-local-dir "etc/")
+    "Where Doom stores its global data files.
+
+  Data files contain shared and long-lived data that Emacs, and their
+  packages require to function correctly or at all. Deleting them by hand will
+  cause breakage, and require user intervention to restore.
+
+  Use this for: server binaries, package source, pulled module libraries,
+  generated files for profiles, profiles themselves, autoloads/loaddefs, etc.")
+
+  ;; Path to my custom lisp files
+  (defvar user-spacemacs-core-dir (expand-file-name "lisp/" dotspacemacs-directory)
+    "Directory containing core customizations, libraries, utilities for Spacemacs.")
+
+  (add-to-list 'load-path user-spacemacs-core-dir)
   )
 
 

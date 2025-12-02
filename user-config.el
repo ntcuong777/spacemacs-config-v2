@@ -28,10 +28,8 @@
 (setq projectile-project-search-path '("~/projects/"
                                        "~/personal-projects/"))
 
-(use-package smartparens
-  :ensure t
-  :hook (prog-mode . smartparens-mode)
-  :config
+(with-eval-after-load 'smartparens
+  (add-hook 'prog-mode-hook #'smartparens-mode)
   (require 'smartparens-config)
 
   (define-key smartparens-mode-map (kbd "M-(") 'sp-wrap-round)
@@ -41,13 +39,13 @@
   (dolist (binding sp-smartparens-bindings)
     (define-key smartparens-mode-map (kbd (car binding)) (cdr binding))))
 
-(add-hook 'lisp-mode-hook #'smartparens-mode)
-(add-hook 'emacs-lisp-mode-hook #'smartparens-mode)
-(add-hook 'elisp-mode #'smartparens-mode)
-(add-hook 'clojure-mode-hook #'smartparens-mode)
+;; (add-hook 'lisp-mode-hook #'smartparens-mode)
+;; (add-hook 'emacs-lisp-mode-hook #'smartparens-mode)
+;; (add-hook 'elisp-mode #'smartparens-mode)
+;; (add-hook 'clojure-mode-hook #'smartparens-mode)
 
-(add-hook 'python-mode-hook #'smartparens-mode)
-(add-hook 'go-mode-hook #'smartparens-mode)
+;; (add-hook 'python-mode-hook #'smartparens-mode)
+;; (add-hook 'go-mode-hook #'smartparens-mode)
 
 
 (with-eval-after-load 'copilot
@@ -127,21 +125,10 @@
 
 ;; ;; Disable xterm mouse mode to avoid conflicts with terminal multiplexer
 ;; (xterm-mouse-mode -1)
-
-;; Terminal mouse support (scroll, click, etc.)
-(unless (display-graphic-p)
-  (xterm-mouse-mode 1)
-  (setq mouse-sel-mode t       ; enable mouse-based selection
-        mouse-yank-at-point t)
-  (global-set-key (kbd "<mouse-4>") #'scroll-down-line)
-  (global-set-key (kbd "<mouse-5>") #'scroll-up-line)
-  (define-key global-map [mouse-1] #'mouse-set-point))
-
-(with-eval-after-load 'evil
-  (define-key evil-normal-state-map [mouse-1] #'mouse-set-point)
-  (define-key evil-insert-state-map [mouse-1] #'mouse-set-point))
+;; NOTE: TTY-specific configuration (mouse, clipboard, cursor, etc.) is now in the tty-config layer
 
 ;; Make Emacs use the system clipboard when possible
+;; (This works in both GUI and TTY, so keeping it here)
 (setq select-enable-clipboard t
       select-enable-primary t
       save-interprogram-paste-before-kill t)
