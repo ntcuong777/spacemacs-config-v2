@@ -294,6 +294,9 @@ This function should only modify configuration layer settings."
      ;; Custom TTY configuration layer
      tty-config
 
+     ;; Custom mason
+     mason
+
      ;; Vim
      evil-better-jumper
      evil-commentary
@@ -320,7 +323,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-frozen-packages '()
 
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '(evil-cleverparens)
 
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.

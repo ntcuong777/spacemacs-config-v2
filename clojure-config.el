@@ -3,7 +3,7 @@
 
 ;; ---------------------------------------
 ;; Safe structural editing for all major modes
-(spacemacs/toggle-evil-safe-lisp-structural-editing-on-register-hooks)
+;; (spacemacs/toggle-evil-safe-lisp-structural-editing-on-register-hooks)
 ;; for clojure layer only (comment out line above)
 ;; (spacemacs/toggle-evil-safe-lisp-structural-editing-on-register-hook-clojure-mode)
 ;;
