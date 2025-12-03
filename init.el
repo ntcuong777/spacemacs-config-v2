@@ -303,6 +303,8 @@ This function should only modify configuration layer settings."
      ;; Custom mason
      mason
 
+     (lazyvim-parity :variables lazyvim-parity-enable-which-key-labels t)
+
      ;; Vim
      evil-better-jumper
      evil-commentary
