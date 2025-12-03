@@ -60,7 +60,7 @@
     "kc"  '(sp-convolute-sexp :which-key "Convolute")
 
     ;; Delete prefix: SPC k d
-    "kds" '(sp-kill-symbol :which-key "Delete symbol")
+    "kds" '(sp-kill-symbol (:which-key) "Delete symbol")
     "kdS" '(sp-backward-kill-symbol :which-key "Delete symbol backward")
     "kdw" '(sp-kill-word :which-key "Delete word")
     "kdW" '(sp-backward-kill-word :which-key "Delete word backward")
@@ -84,13 +84,13 @@
     "kU"  '(sp-backward-up-sexp :which-key "Up backward")
 
     ;; Wrap prefix: SPC k w
-    "kw(" '(sp-wrap-round :which-key "Wrap ()")
-    "kw{" '(sp-wrap-curly :which-key "Wrap {}")
-    "kw[" '(sp-wrap-square :which-key "Wrap []")
-    "kww" '(sp-wrap-round :which-key "Wrap round")
-    "kwc" '(sp-wrap-curly :which-key "Wrap curly")
-    "kws" '(sp-wrap-square :which-key "Wrap square")
-    "kwu" '(sp-unwrap-sexp :which-key "Unwrap")
+    ;; "kw(" '(sp-wrap-round :which-key "Wrap ()")
+    ;; "kw{" '(sp-wrap-curly :which-key "Wrap {}")
+    ;; "kw[" '(sp-wrap-square :which-key "Wrap []")
+    ;; "kww" '(sp-wrap-round :which-key "Wrap round")
+    ;; "kwc" '(sp-wrap-curly :which-key "Wrap curly")
+    ;; "kws" '(sp-wrap-square :which-key "Wrap square")
+    ;; "kwu" '(sp-unwrap-sexp :which-key "Unwrap")
 
     "ky"  '(sp-copy-sexp :which-key "Copy sexp"))
   )
@@ -102,7 +102,6 @@
 
 ;; (add-hook 'python-mode-hook #'smartparens-mode)
 ;; (add-hook 'go-mode-hook #'smartparens-mode)
-
 
 (with-eval-after-load 'copilot
   (setq copilot-max-char-warning-disable t
@@ -121,7 +120,6 @@
                            (typescript-mode . 2)
                            (typescript-ts-mode . 2)))
     (add-to-list 'copilot-indentation-alist indent-config))
-  (add-hook 'prog-mode-hook #'copilot-mode)
   )
 
 
@@ -149,27 +147,28 @@
 
 ;; 1) Bind ESC → C-g in the global keymap (lowest precedence)
 (global-set-key (kbd "<escape>") 'keyboard-quit)
+(define-key evil-emacs-state-map (kbd "<escape>") 'keyboard-quit)
 
 ;; 2) After Evil loads, re-bind ESC in each state map
 ;;    (this will override the global binding in those Evil states)
-(with-eval-after-load 'evil
-  ;; Insert state: ESC → back to Normal
-  (define-key evil-insert-state-map (kbd "<escape>") 'evil-normal-state)
+;; (with-eval-after-load 'evil
+;;   ;; Insert state: ESC → back to Normal
+;;   (define-key evil-insert-state-map (kbd "<escape>") 'evil-normal-state)
 
-  ;; Visual state: ESC → exit Visual (same as default)
-  (define-key evil-visual-state-map (kbd "<escape>") 'evil-exit-visual-state)
+;;   ;; Visual state: ESC → exit Visual (same as default)
+;;   (define-key evil-visual-state-map (kbd "<escape>") 'evil-exit-visual-state)
 
-  ;; Replace state: ESC → Normal
-  (define-key evil-replace-state-map (kbd "<escape>") 'evil-normal-state)
+;;   ;; Replace state: ESC → Normal
+;;   (define-key evil-replace-state-map (kbd "<escape>") 'evil-normal-state)
 
-  ;; Operator-pending state: ESC → cancel
-  (define-key evil-operator-state-map (kbd "<escape>") 'evil-normal-state)
+;;   ;; Operator-pending state: ESC → cancel
+;;   (define-key evil-operator-state-map (kbd "<escape>") 'evil-normal-state)
 
-  ;; Motion state: ESC → Normal
-  (define-key evil-motion-state-map (kbd "<escape>") 'evil-normal-state)
+;;   ;; Motion state: ESC → Normal
+;;   (define-key evil-motion-state-map (kbd "<escape>") 'evil-normal-state)
 
-  ;; Emacs state: ESC → Normal
-  (define-key evil-emacs-state-map (kbd "<escape>") 'evil-normal-state))
+;;   ;; Emacs state: ESC → Normal
+;;   (define-key evil-emacs-state-map (kbd "<escape>") 'evil-normal-state))
 
 (with-eval-after-load 'helm
   ;; Make <escape> quit any active Helm session
@@ -188,16 +187,6 @@
 
   ;; Also catch ESC sequences (two-step ESC ESC)
   (define-key helm-map (kbd "ESC ESC") #'helm-keyboard-quit))
-
-;; ;; Disable xterm mouse mode to avoid conflicts with terminal multiplexer
-;; (xterm-mouse-mode -1)
-;; NOTE: TTY-specific configuration (mouse, clipboard, cursor, etc.) is now in the tty-config layer
-
-;; Make Emacs use the system clipboard when possible
-;; (This works in both GUI and TTY, so keeping it here)
-(setq select-enable-clipboard t
-      select-enable-primary t
-      save-interprogram-paste-before-kill t)
 
 (with-eval-after-load 'lsp-pyright
   (setq lsp-pyright-langserver-command "basedpyright")
@@ -249,15 +238,15 @@
 ;;
 
 (with-eval-after-load 'evil-cleverparens
-  (setq evil-cp-move-beginning-of-defun-keys '("M-[" "M-{")
-        evil-cp-move-end-of-defun-keys '("M-]" "M-}"))
+  (setq evil-cp-move-beginning-of-defun-keys '("C-M-l")
+        evil-cp-move-end-of-defun-keys '("C-M-h"))
 
   ;; (delete '("M-l" . evil-cp-beginning-of-defun) evil-cp-additional-movement-keys)
   ;; (delete '("M-h" . evil-cp-end-of-defun) evil-cp-additional-movement-keys)
-  ;; (dolist (key evil-cp-move-beginning-of-defun-keys)
-  ;;   (add-to-list 'evil-cp-additional-movement-keys `(,key . evil-cp-beginning-of-defun)))
-  ;; (dolist (key evil-cp-move-end-of-defun-keys)
-  ;;   (add-to-list 'evil-cp-additional-movement-keys `(,key . evil-cp-end-of-defun)))
+  (dolist (key evil-cp-move-beginning-of-defun-keys)
+    (add-to-list 'evil-cp-additional-movement-keys `(,key . evil-cp-beginning-of-defun)))
+  (dolist (key evil-cp-move-end-of-defun-keys)
+    (add-to-list 'evil-cp-additional-movement-keys `(,key . evil-cp-end-of-defun)))
 
   (evil-cp-set-additional-movement-keys)
   )
