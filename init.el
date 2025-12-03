@@ -45,6 +45,7 @@ This function should only modify configuration layer settings."
      ;; Show snippets in the auto-completion popup
      ;; Show suggestions by most commonly used
      (auto-completion :variables
+                      auto-completion-front-end 'company
                       auto-completion-return-key-behavior 'complete
                       auto-completion-tab-key-behavior 'cycle
                       auto-completion-complete-with-key-sequence "fd"
@@ -53,8 +54,8 @@ This function should only modify configuration layer settings."
                       auto-completion-enable-snippets-in-popup t
                       auto-completion-enable-sort-by-usage t
                       auto-completion-use-company-box nil
-                      auto-completion-use-company-posframe t
-                      auto-completion-idle-delay 0.1
+                      auto-completion-use-company-posframe (display-graphic-p)
+                      auto-completion-idle-delay 0.2
                       auto-completion-minimum-prefix-length 1
                       )
 
@@ -75,7 +76,8 @@ This function should only modify configuration layer settings."
 
      ;; Nyan cat indicating relative position in current buffer
      ;; :variables colors-enable-nyan-cat-progress-bar (display-graphic-p)
-     colors
+     (colors :variables
+             colors-colorize-identifiers 'variables)
 
      ;; SPC a L displays key and command history in a separate buffer
      command-log
@@ -116,6 +118,10 @@ This function should only modify configuration layer settings."
      ;; helm follow mode previews when scrolling through a helm list
      ;; - remembers use of C-c C-f in helm pop-up
      helm
+     ;; ivy
+     ;; (compleseus :variables
+     ;;             compleseus-engine 'vertico
+     ;;             compleseus-consult-preview-keys '("M-." "C-SPC" :debounce 0.5 "<up>" "<down>"))
 
      ;; Enhance Emacs
      (ibuffer :variables
@@ -123,7 +129,7 @@ This function should only modify configuration layer settings."
      ;;helpful
      dtrt-indent
      nav-flash
-     spacemacs-completion
+     ;; spacemacs-completion  ;; Duplicate with helm/ivy/compleseus
      spacemacs-defaults
      spacemacs-editing
      spacemacs-editing-visual
@@ -132,7 +138,7 @@ This function should only modify configuration layer settings."
      spacemacs-navigation
      spacemacs-org
      spacemacs-project
-     spacemacs-purpose
+     ;; spacemacs-purpose  ;; Apparently not needed
      spacemacs-visual
 
      html
@@ -177,7 +183,7 @@ This function should only modify configuration layer settings."
           lsp-ui-peek-enable nil                          ; popups for refs, errors, symbols, etc.
           lsp-semantic-tokens-enable nil                  ; enhance syntax highlight
           lsp-treemacs-error-list-current-project-only t  ; limit errors to current project
-          lsp-idle-delay 1.5                              ; smooth LSP features response
+          lsp-idle-delay 0.8                              ; smooth LSP features response
           lsp-eldoc-enable-hover nil                      ; disable all hover actions
           lsp-ui-doc-enable nil                           ; doc hover popups
           lsp-ui-sideline-enable nil                      ; sidebar code actions visual indicator
@@ -257,12 +263,13 @@ This function should only modify configuration layer settings."
      ;; (syntax-checking :variables
      ;;                  syntax-checking-use-original-bitmaps t)
 
+     ;; NOTE: Use ranger or treemacs, not both
      ;; Visual file manager - `SPC p t'
      ;; treemacs-no-png-images t removes file and directory icons
-     (treemacs :variables
-               treemacs-indentation 1
-               treemacs-use-filewatch-mode t
-               treemacs-use-follow-mode t)
+     ;; (treemacs :variables
+     ;;           treemacs-indentation 1
+     ;;           treemacs-use-filewatch-mode t
+     ;;           treemacs-use-follow-mode t)
 
      ;; Support font ligatures (fancy symbols) in all modes
      ;; 'prog-mode for only programming languages
@@ -283,7 +290,7 @@ This function should only modify configuration layer settings."
      ;;osx
      dash
      pdf
-     epub
+     ;; epub
      github-copilot
      llm-client
 
@@ -321,7 +328,17 @@ This function should only modify configuration layer settings."
    dotspacemacs-frozen-packages '()
 
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '(yasnippet)
+   dotspacemacs-excluded-packages '(;; auto-completion package excludes
+                                    yasnippet
+                                    auto-yasnippet
+                                    yasnippet-snippets
+
+                                    ;; compleseus
+                                    consult-yasnippet
+
+                                    ;; colors, don't use this, color-identifiers-mode is sufficient
+                                    rainbow-identifiers
+                                    )
 
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
@@ -486,7 +503,7 @@ It should only modify the values of Spacemacs settings."
    ;; fixed-pitch faces. The `:size' can be specified as
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
-   dotspacemacs-default-font '("Fira Code"
+   dotspacemacs-default-font '("FiraCode Nerd Font"
                                :size 14.0
                                :weight normal
                                :width normal)
@@ -524,7 +541,7 @@ It should only modify the values of Spacemacs settings."
    ;; and TAB or `C-m' and `RET'.
    ;; In the terminal, these pairs are generally indistinguishable, so this only
    ;; works in the GUI. (default nil)
-   dotspacemacs-distinguish-gui-tab nil
+   dotspacemacs-distinguish-gui-tab t
 
    ;; Name of the default layout (default "Default")
    dotspacemacs-default-layout-name "Default"
