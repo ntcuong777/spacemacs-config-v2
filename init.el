@@ -144,7 +144,7 @@ This function should only modify configuration layer settings."
          go-tab-width 2
          go-format-before-save t
          go-use-golangci-lint t)
-     ipython-notebook
+     ;;ipython-notebook
      (python :variables
              python-backend 'lsp
              python-lsp-server 'pyright
@@ -185,7 +185,6 @@ This function should only modify configuration layer settings."
           lsp-log-io nil                                  ; Log client-server json communication
           lsp-format-buffer-on-save nil
           lsp-enable-indentation nil
-          lsp-pyright-langserver-command "basedpyright"
           )
 
      markdown
@@ -316,7 +315,6 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages '(catppuccin-theme
                                       clojure-essential-ref
                                       lsp-pyright
-                                      ;; kkp and evil-terminal-cursor-changer moved to tty-config layer
                                       )
 
    ;; A list of packages that cannot be updated.

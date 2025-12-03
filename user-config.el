@@ -145,9 +145,37 @@
 ;; Map comment to `Cmd+/' on MacOS
 (define-key global-map (kbd "H-/") 'spacemacs/comment-or-uncomment-lines)
 
-;; 1) Bind ESC → C-g in the global keymap (lowest precedence)
-(global-set-key (kbd "<escape>") 'keyboard-quit)
-(define-key evil-emacs-state-map (kbd "<escape>") 'keyboard-quit)
+(defun my/escape-quit ()
+  "A more consistent ESC quit."
+  (interactive)
+  (cond
+   ;; If a minibuffer is active, close it.
+   ((minibufferp) (abort-recursive-edit))
+   ;; If region is active, deactivate it.
+   ((region-active-p) (deactivate-mark))
+   ;; Otherwise, run the standard quit.
+   (t (keyboard-quit))))
+
+(with-eval-after-load 'evil
+  ;; Normal/visual/motion: ESC quits
+  (define-key evil-normal-state-map [escape] #'my/escape-quit)
+  (define-key evil-visual-state-map [escape] #'my/escape-quit)
+  (define-key evil-motion-state-map [escape] #'my/escape-quit)
+  (define-key evil-insert-state-map [escape] #'evil-normal-state))
+
+;; Minibuffer maps: ESC aborts
+(define-key minibuffer-local-map [escape] #'abort-recursive-edit)
+(define-key minibuffer-local-ns-map [escape] #'abort-recursive-edit)
+(define-key minibuffer-local-completion-map [escape] #'abort-recursive-edit)
+(define-key minibuffer-local-must-match-map [escape] #'abort-recursive-edit)
+(define-key minibuffer-local-isearch-map [escape] #'abort-recursive-edit)
+
+;; Global fallback
+(global-set-key [escape] #'my/escape-quit)
+
+;; ;; 1) Bind ESC → C-g in the global keymap (lowest precedence)
+;; (global-set-key (kbd "<escape>") 'keyboard-quit)
+
 
 ;; 2) After Evil loads, re-bind ESC in each state map
 ;;    (this will override the global binding in those Evil states)
@@ -170,23 +198,23 @@
 ;;   ;; Emacs state: ESC → Normal
 ;;   (define-key evil-emacs-state-map (kbd "<escape>") 'evil-normal-state))
 
-(with-eval-after-load 'helm
-  ;; Make <escape> quit any active Helm session
-  (dolist (map (list
-                'helm-map               ; main helm map
-                'helm-generic-files-map ; some commands fall back here
-                'helm-find-files-map    ; in M-x find-file
-                'helm-read-file-map     ; in reading filenames
-                'helm-grep-map          ; in grep/rgrep buffers
-                'helm-M-x-map
-                'helm-locate-map
-                'helm-swoop-map
-                ))
-    (when (boundp map)
-      (define-key (symbol-value map) (kbd "<escape>") #'helm-keyboard-quit)))
+;; (with-eval-after-load 'helm
+;;   ;; Make <escape> quit any active Helm session
+;;   (dolist (map (list
+;;                 'helm-map               ; main helm map
+;;                 'helm-generic-files-map ; some commands fall back here
+;;                 'helm-find-files-map    ; in M-x find-file
+;;                 'helm-read-file-map     ; in reading filenames
+;;                 'helm-grep-map          ; in grep/rgrep buffers
+;;                 'helm-M-x-map
+;;                 'helm-locate-map
+;;                 'helm-swoop-map
+;;                 ))
+;;     (when (boundp map)
+;;       (define-key (symbol-value map) (kbd "<escape>") #'helm-keyboard-quit)))
 
-  ;; Also catch ESC sequences (two-step ESC ESC)
-  (define-key helm-map (kbd "ESC ESC") #'helm-keyboard-quit))
+;;   ;; Also catch ESC sequences (two-step ESC ESC)
+;;   (define-key helm-map (kbd "ESC ESC") #'helm-keyboard-quit))
 
 (with-eval-after-load 'lsp-pyright
   (setq lsp-pyright-langserver-command "basedpyright")
