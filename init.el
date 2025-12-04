@@ -142,7 +142,7 @@ This function should only modify configuration layer settings."
      spacemacs-visual
 
      html
-     javascript
+     ;; javascript
      typescript
      erlang
      elixir
