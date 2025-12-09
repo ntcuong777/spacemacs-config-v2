@@ -43,4 +43,3 @@
     :config
     (when (not (display-graphic-p))
       (global-kkp-mode))))
-

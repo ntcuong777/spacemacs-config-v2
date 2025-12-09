@@ -286,7 +286,7 @@ This function should only modify configuration layer settings."
                       version-control-global-margin t)
 
      (yaml :variables
-           yaml-enable-lsp t)
+           yaml-enable-lsp nil)
 
      ;;osx
      dash
@@ -304,7 +304,7 @@ This function should only modify configuration layer settings."
      ;; Custom mason
      mason
 
-     (lazyvim-parity :variables lazyvim-parity-enable-which-key-labels t)
+     ;; (lazyvim-parity :variables lazyvim-parity-enable-which-key-labels t)
 
      ;; Vim
      evil-better-jumper
@@ -335,6 +335,8 @@ This function should only modify configuration layer settings."
                                     yasnippet
                                     auto-yasnippet
                                     yasnippet-snippets
+
+                                    helm
 
                                     ;; colors
                                     rainbow-delimiters ;; I rely on bracket highlighting
@@ -423,6 +425,41 @@ This function should only modify configuration layer settings."
                                     helm-cscope
                                     sphinx-doc
                                     xcscope
+                                    live-py-mode
+                                    nose
+                                    pylookup
+                                    pip-requirements
+
+                                    ;; json
+                                    prettier-js
+                                    json-navigator
+                                    json-reformat
+                                    json-snatcher
+
+                                    ;; shell-scripts
+                                    fish-mode
+
+                                    ;; nixos layer, actually just needs nix-mode
+                                    company-nixos-options
+                                    helm-nixos-options
+                                    nixos-options
+
+                                    ;; LSP
+                                    lsp-treemacs
+                                    helm-lsp
+                                    lsp-ivy
+                                    lsp-sonarlint
+
+                                    ;; Markdown
+                                    edit-indirect
+
+                                    ;; Shell
+                                    eat
+                                    esh-help
+                                    eshell-prompt-extras
+                                    eshell-z
+                                    multi-term
+                                    terminal-here
 
                                     ;; not using debugger
                                     dap-mode
@@ -586,7 +623,7 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(all-the-icons)
+   dotspacemacs-mode-line-theme '(doom)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
