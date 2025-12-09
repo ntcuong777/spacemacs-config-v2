@@ -13,7 +13,7 @@
 ;; ---------------------------------------
 ;; Searching
 ;; replace / search with helm-swoop in Evil normal state
-(evil-global-set-key 'normal "/" 'helm-swoop)
+;; (evil-global-set-key 'normal "/" 'helm-swoop)
 ;;
 ;; ---------------------------------------
 
@@ -22,7 +22,7 @@
 ;; Recent release of helm-descbinds package breaks which-key menu
 ;; Remove helm-discbinds-mode from helm mode hook to avoid activating
 ;; https://github.com/syl20bnr/spacemacs/issues/16276
-(remove-hook 'helm-mode-hook 'helm-descbinds-mode)
+;; (remove-hook 'helm-mode-hook 'helm-descbinds-mode)
 ;; ---------------------------------------
 
 (setq projectile-project-search-path '("~/projects/"

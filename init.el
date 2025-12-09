@@ -62,7 +62,7 @@ This function should only modify configuration layer settings."
      ;; https://develop.spacemacs.org/layers/+lang/clojure/README.html
      (clojure :variables
               clojure-backend 'cider                 ; use cider and disable lsp
-              clojure-enable-kaocha-runner t            ; enable Kaocha test runner
+              clojure-enable-kaocha-runner nil            ; enable Kaocha test runner
               cider-repl-display-help-banner nil        ; disable help banner
               cider-print-fn 'puget                     ; pretty printing with sorted keys / set values
               clojure-indent-style 'align-arguments
@@ -117,11 +117,11 @@ This function should only modify configuration layer settings."
      ;; add variable `helm-follow-mode-persistent t' for helm-follow-mode sticky
      ;; helm follow mode previews when scrolling through a helm list
      ;; - remembers use of C-c C-f in helm pop-up
-     helm
+     ;; helm
      ;; ivy
-     ;; (compleseus :variables
-     ;;             compleseus-engine 'vertico
-     ;;             compleseus-consult-preview-keys '("M-." "C-SPC" :debounce 0.5 "<up>" "<down>"))
+     (compleseus :variables
+                 compleseus-engine 'vertico
+                 compleseus-consult-preview-keys '("M-." "C-SPC" :debounce 0.5 "<up>" "<down>"))
 
      ;; Enhance Emacs
      (ibuffer :variables
@@ -150,7 +150,7 @@ This function should only modify configuration layer settings."
          go-tab-width 2
          go-format-before-save t
          go-use-golangci-lint t)
-     ;;ipython-notebook
+     ipython-notebook
      (python :variables
              python-backend 'lsp
              python-lsp-server 'pyright
@@ -162,6 +162,7 @@ This function should only modify configuration layer settings."
              python-pylint nil
              python-check-command nil ;; Disable linting and PEP8 strict checks
              python-sort-imports-on-save t
+             python-enable-importmagic t
              python-auto-format-on-save nil ;; disable auto-formatting, it is annoying to use with auto-save
              python-format-on-save nil
              python-fill-column 100
@@ -335,6 +336,97 @@ This function should only modify configuration layer settings."
                                     auto-yasnippet
                                     yasnippet-snippets
 
+                                    ;; colors
+                                    rainbow-delimiters ;; I rely on bracket highlighting
+
+                                    evil-cleverparens ;; Not needed atm
+
+                                    ;; emacs-lisp
+                                    inspector ;; not needed for emacs lisp
+                                    overseer
+                                    macrostep
+                                    semantic
+                                    srefactor
+                                    emr
+
+                                    ;; git
+                                    code-review
+                                    forge
+                                    gitignore-templates
+                                    git-link
+                                    git-messenger
+                                    git-timemachine
+                                    magit-delta
+                                    magit-gitflow
+                                    magit-section
+                                    magit-svn
+                                    magit-todos
+                                    orgit
+                                    orgit-forge
+                                    smeargle
+
+                                    ;; spacemacs-editing
+                                    drag-stuff
+                                    editorconfig
+                                    origami
+                                    uuidgen
+                                    string-inflection
+                                    string-edit-at-point
+                                    link-hint
+                                    lorem-ipsum
+
+                                    ;; evil
+                                    evil-indent-plus
+                                    evil-args
+                                    evil-exchange
+                                    evil-iedit-state
+                                    evil-lion
+                                    evil-lisp-state
+                                    evil-matchit
+                                    evil-nerd-commenter
+                                    evil-numbers
+                                    evil-textobj-line
+                                    evil-tutor
+                                    evil-unimpaired
+
+                                    ;; editing visual
+                                    hide-comnt
+                                    writeroom-mode
+
+                                    ;; navigating
+                                    ace-link
+                                    ace-window
+                                    centered-cursor-mode
+                                    open-junk-file
+                                    paradox
+                                    ;; winum
+                                    disable-mouse
+
+                                    ;; html
+                                    emmet-mode
+                                    impatient-mode
+                                    less-css-mode
+                                    prettier-js
+                                    pug-mode
+                                    sass-mode
+                                    scss-mode
+                                    slim-mode
+
+                                    ;; Go
+                                    go-gen-test
+                                    go-guru
+                                    godoctor
+                                    go-rename
+
+                                    ;; Python
+                                    cython-mode
+                                    helm-cscope
+                                    sphinx-doc
+                                    xcscope
+
+                                    ;; not using debugger
+                                    dap-mode
+
                                     ;; compleseus
                                     consult-yasnippet
 
@@ -494,7 +586,7 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(doom)
+   dotspacemacs-mode-line-theme '(all-the-icons)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
@@ -745,7 +837,7 @@ It should only modify the values of Spacemacs settings."
    ;; `undo-redo', `undo-fu' and `undo-tree' see also `evil-undo-system'.
    ;; Note that saved undo history does not get transferred when changing
    ;; your undo system from or to undo-tree. (default `undo-redo')"
-   dotspacemacs-undo-system 'undo-redo
+   dotspacemacs-undo-system 'undo-fu
 
    ;; Format specification for setting the frame title.
    ;; %a - the `abbreviated-file-name', or `buffer-name'
