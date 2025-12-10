@@ -281,3 +281,10 @@
 
   (evil-cp-set-additional-movement-keys)
   )
+
+
+;; ---------------------------------------
+;; Copilot
+;;
+(setq copilot-max-char-warning-disable t
+      copilot-indent-offset-warning-disable t)

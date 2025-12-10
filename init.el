@@ -76,8 +76,7 @@ This function should only modify configuration layer settings."
 
      ;; Nyan cat indicating relative position in current buffer
      ;; :variables colors-enable-nyan-cat-progress-bar (display-graphic-p)
-     (colors :variables
-             colors-colorize-identifiers 'variables)
+     colors
 
      ;; SPC a L displays key and command history in a separate buffer
      command-log
@@ -163,7 +162,7 @@ This function should only modify configuration layer settings."
              python-pylint nil
              python-check-command nil ;; Disable linting and PEP8 strict checks
              python-sort-imports-on-save t
-             python-enable-importmagic t
+             python-enable-importmagic nil ;; requires `importmagic` and `epc` in each python env
              python-auto-format-on-save nil ;; disable auto-formatting, it is annoying to use with auto-save
              python-format-on-save nil
              python-fill-column 100
@@ -176,6 +175,11 @@ This function should only modify configuration layer settings."
      shell-scripts
      sql
      nixos
+     (tree-sitter :variables
+                  spacemacs-tree-sitter-hl-black-list '(js2-mode rjsx-mode)
+                  tree-sitter-syntax-highlight-enable t
+                  tree-sitter-fold-enable t
+                  tree-sitter-fold-indicators-enable nil)
 
      ;; Language server protocol with minimal visual impact
      ;; https://practical.li/spacemacs/install-spacemacs/clojure-lsp/
@@ -1075,6 +1079,10 @@ before packages are loaded."
   ;; Clojure Layer additionalb configuration
   (setq clojure-config-file (file-truename (concat dotspacemacs-directory "clojure-config.el")))
   (load clojure-config-file)
+
+  ;; Python additional configuration
+  (setq python-config-file (file-truename (concat dotspacemacs-directory "python-config.el")))
+  (load python-config-file)
 
   ;; Customise Theme and Mode-line
   (setq theme-config-file (file-truename (concat dotspacemacs-directory "theme-config.el")))
