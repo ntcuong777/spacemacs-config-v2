@@ -94,7 +94,7 @@ This function should only modify configuration layer settings."
      emacs-lisp
 
      ;; Include emojis into everything
-     emoji
+     ;; emoji
 
      ;; SPC g s opens Magit git client full screen (q restores previous layout)
      ;; show word-granularity differences in current diff hunk
@@ -128,18 +128,19 @@ This function should only modify configuration layer settings."
               ibuffer-group-buffers-by 'projects)
      ;;helpful
      dtrt-indent
-     nav-flash
+     ;; nav-flash
      ;; spacemacs-completion  ;; Duplicate with helm/ivy/compleseus
      spacemacs-defaults
+     better-defaults
      spacemacs-editing
      spacemacs-editing-visual
-     spacemacs-evil
-     spacemacs-misc
-     spacemacs-navigation
-     spacemacs-org
+     ;; spacemacs-evil
+     ;; spacemacs-misc
+     ;; spacemacs-navigation
+     ;; spacemacs-org
      spacemacs-project
      ;; spacemacs-purpose  ;; Apparently not needed
-     spacemacs-visual
+     ;; spacemacs-visual
 
      html
      ;; javascript
@@ -324,7 +325,6 @@ This function should only modify configuration layer settings."
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(catppuccin-theme
                                       clojure-essential-ref
-                                      lsp-pyright
                                       )
 
    ;; A list of packages that cannot be updated.

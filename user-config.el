@@ -216,8 +216,11 @@
 ;;   ;; Also catch ESC sequences (two-step ESC ESC)
 ;;   (define-key helm-map (kbd "ESC ESC") #'helm-keyboard-quit))
 
-(with-eval-after-load 'lsp-pyright
+(with-eval-after-load 'lsp-mode
+  (require 'lsp-pyright)
   (setq lsp-pyright-langserver-command "basedpyright")
+  (remove-hook 'python-mode-hook #'lsp)
+  (remove-hook 'python-mode-hook #'lsp-deferred)
   (add-hook 'python-mode-hook (lambda ()
                                 (require 'lsp-pyright)
                                 (lsp-deferred))))  ; or lsp-deferred
