@@ -54,7 +54,7 @@ This function should only modify configuration layer settings."
                       auto-completion-enable-snippets-in-popup t
                       auto-completion-enable-sort-by-usage t
                       auto-completion-use-company-box nil
-                      auto-completion-use-company-posframe (display-graphic-p)
+                      auto-completion-use-company-posframe t
                       auto-completion-idle-delay 0.2
                       auto-completion-minimum-prefix-length 1
                       )
@@ -144,7 +144,7 @@ This function should only modify configuration layer settings."
      html
      ;; javascript
      typescript
-     erlang
+     ;; erlang
      elixir
      (go :variables
          go-tab-width 2
@@ -290,7 +290,7 @@ This function should only modify configuration layer settings."
 
      ;;osx
      dash
-     pdf
+     ;; pdf
      ;; epub
      github-copilot
      llm-client
@@ -338,12 +338,23 @@ This function should only modify configuration layer settings."
 
                                     helm
                                     treemacs
+                                    treemacs-evil
+                                    treemacs-icons-dired
+                                    treemacs-magit
+                                    treemacs-persp
+                                    treemacs-projectile
                                     neotree
 
                                     ;; colors
                                     rainbow-delimiters ;; I rely on bracket highlighting
 
                                     evil-cleverparens ;; Not needed atm
+
+                                    ;; Dictionary stuff
+                                    define-word
+                                    google-translate
+
+                                    emoji-cheat-sheet-plus
 
                                     ;; emacs-lisp
                                     inspector ;; not needed for emacs lisp
@@ -416,6 +427,10 @@ This function should only modify configuration layer settings."
                                     scss-mode
                                     slim-mode
 
+                                    ;; JS
+                                    js2-refactor
+                                    livid-mode
+
                                     ;; Go
                                     go-gen-test
                                     go-guru
@@ -471,6 +486,15 @@ This function should only modify configuration layer settings."
 
                                     ;; colors, don't use this, color-identifiers-mode is sufficient
                                     rainbow-identifiers
+
+                                    ;; others
+                                    haml-mode
+                                    helm
+                                    helm-core
+                                    helm-make
+                                    holy-mode
+                                    htmlize
+                                    ;; hydra ;; break if remove?
                                     )
 
    ;; Defines the behaviour of Spacemacs when installing packages.

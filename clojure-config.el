@@ -18,7 +18,7 @@
 
 ;; Auto-indent code automatically
 ;; https://emacsredux.com/blog/2016/02/07/auto-indent-your-code-with-aggressive-indent-mode/
-;; (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
+(add-hook 'clojure-mode-hook #'aggressive-indent-mode)
 
 ;; Lookup functions in Clojure - The Essentail Reference book
 ;; https://github.com/p3r7/clojure-essential-ref
